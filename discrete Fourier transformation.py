@@ -1,4 +1,4 @@
-# transformation functions for images
+# discrete Fourier Transformation
 
 import math
 import cmath
@@ -20,7 +20,8 @@ def DFT(data, width, height):
                     #value shows the intensity, e.g. of a colour of a pixel
                     value = data[i][j]
                     #formula may be wrong, maybe change x and y in formula?
-                    coefficient += value * cmath.exp(-(1) * cmath.sqrt(-1) * 2 * math.pi * (i * y + j * x) / (height * width))
+                    addend = value * cmath.exp(-(1) * cmath.sqrt(-1) * 2 * math.pi * (i * y + j * x) / (height * width))
+                    coefficient += addend
             #appending the coefficient to the coefficientArray
             coefficientsArray[y].append(coefficient)
     return coefficientsArray
@@ -41,7 +42,8 @@ def iDFT(coefficientsArray, width, height):
             for i in range(0, height):
                 for j in range(0, width):
                     coefficient = coefficientsArray[i][j]
-                    value += coefficient * cmath.exp(cmath.sqrt(-1) * 2 * math.pi * (i * y + j * x) / (height * width))
+                    addend = coefficient * cmath.exp(cmath.sqrt(-1) * 2 * math.pi * (i * y + j * x) / (height * width))
+                    value += addend
             value = value * (1 / (height * width)) #sometihing
             #appending the value to the data-array
             data[y].append(value)
@@ -65,40 +67,20 @@ for i in range(0, height):
             data[i].append(1)
         else:
             data[i].append(0)
-print(data)
+#print(data)
 
-print(iDFT(DFT(data, width, height), width, height))
+#print(iDFT(DFT(data, width, height), width, height))
+coefficientsArray = []
+for i in range(0, height):
+    coefficientsArray.append([])
 
+for i in range(0, height):
+    for j in range(0, width):
+        if (i == 0 and j == 0) or (i == 4 and j == 0):
+            coefficientsArray[i].append(32 + 0 * cmath.sqrt(-1))
+        else:
+            coefficientsArray[i].append(0 + 0 * cmath.sqrt(-1))
 
+print(coefficientsArray) 
+print(iDFT(coefficientsArray, height, width)) # should be: 1,1,1,1..0,0,0,0,0...1,1,1,1...
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    

@@ -25,6 +25,25 @@ def blockArray8x8(bildArray, width, height):
     return array3D
 
 
+#this functions removes what rhw blockArray8x8 did
+def oneDArray(array3D, width, height):
+    numberBlocks = int(width * height / 64)
+    blocksInRow = int(width / 8)
+    bildArray = []
+
+
+    for j in range(0, width * height):
+        x = j % width
+        y = int((j - x) / width)
+        blockRow = int((y - (y % 8)) / 8)
+        blockColumn = int((x - (x % 8)) / 8)
+        block = blockRow * blocksInRow + blockColumn
+        row = y - blockRow * 8
+        column = x % 8
+        bildArray.append(array3D[block][row][column])
+
+    return bildArray
+
 #main programm------------------------------
 
 
@@ -35,6 +54,17 @@ height = 16
 #filling the Array with values
 for i in range(0, height * width):
     bildArray.append(random.randint(0, 255))
-print(bildArray)
-print("--------------------------------------------")
-print(blockArray8x8(bildArray, width, height))
+#print(bildArray)
+#print("--------------------------------------------")
+array3D = blockArray8x8(bildArray, width, height)
+#print(array3D)
+oldArray = oneDArray(array3D, width, height)
+#print(oldArray)
+#print("Length bilArray:", len(bildArray), "Length oldArray:", len(oldArray))
+#check if input and output are the same:
+
+for i in range(0, width * height):
+    if bildArray[i] != oldArray[i]:
+        print("Fail!")
+        print("bildArray:", bildArray[i], "oldArray:", oldArray[i])
+print("Sucess!")

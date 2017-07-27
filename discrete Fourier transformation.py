@@ -1,6 +1,5 @@
 # discrete Fourier Transformation
 
-import math
 import cmath
 
 def DFT(data, width, height):
@@ -20,7 +19,7 @@ def DFT(data, width, height):
                     #value shows the intensity, e.g. of a colour of a pixel
                     value = data[i][j]
                     #formula may be wrong, maybe change x and y in formula?
-                    addend = value * cmath.exp(-(1) * cmath.sqrt(-1) * 2 * math.pi * (i * y + j * x) / (height * width))
+                    addend = value * cmath.exp(-(1) * cmath.sqrt(-1) * 2 * cmath.pi * (i * y + j * x) / (height * width))
                     coefficient += addend
             #appending the coefficient to the coefficientArray
             coefficientsArray[y].append(coefficient)
@@ -42,7 +41,7 @@ def iDFT(coefficientsArray, width, height):
             for i in range(0, height):
                 for j in range(0, width):
                     coefficient = coefficientsArray[i][j]
-                    addend = coefficient * cmath.exp(cmath.sqrt(-1) * 2 * math.pi * (i * y + j * x) / (height * width))
+                    addend = coefficient * cmath.exp(cmath.sqrt(-1) * 2 * cmath.pi * (i * y + j * x) / (height * width))
                     value += addend
             value = value * (1 / (height * width)) #sometihing
             #appending the value to the data-array

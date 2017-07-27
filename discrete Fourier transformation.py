@@ -10,19 +10,19 @@ def DFT(data, width, height):
         coefficientsArray.append([])
     
     #creating an array of fourier-coefficients
-    for y in range(0, height):
-        for x in range(0, width):
+    for k in range(0, height):
+        for l in range(0, width):
             # creating a single fourier-coefficient
             coefficient = 0
-            for i in range(0, height):
-                for j in range(0, width):
+            for m in range(0, height):
+                for n in range(0, width):
                     #value shows the intensity, e.g. of a colour of a pixel
-                    value = data[i][j]
+                    value = data[m][n]
                     #formula may be wrong, maybe change x and y in formula?
-                    addend = value * cmath.exp(-(1) * cmath.sqrt(-1) * 2 * cmath.pi * (i * y + j * x) / (height * width))
+                    addend = value * cmath.exp((-2) * 1j  * cmath.pi * ((m * k / height) + (n * l / width)))
                     coefficient += addend
             #appending the coefficient to the coefficientArray
-            coefficientsArray[y].append(coefficient)
+            coefficientsArray[k].append(coefficient)
     return coefficientsArray
 
 def iDFT(coefficientsArray, width, height):
@@ -34,18 +34,18 @@ def iDFT(coefficientsArray, width, height):
         data.append([])
 
     #creating an array of colour-values
-    for y in range(0, height):
-        for x in range(0, width):
+    for m in range(0, height):
+        for n in range(0, width):
             #creating a single value
             value = 0
-            for i in range(0, height):
-                for j in range(0, width):
-                    coefficient = coefficientsArray[i][j]
-                    addend = coefficient * cmath.exp(cmath.sqrt(-1) * 2 * cmath.pi * (i * y + j * x) / (height * width))
+            for k in range(0, height):
+                for l in range(0, width):
+                    coefficient = coefficientsArray[k][l]
+                    addend = coefficient * cmath.exp(2 * cmath.pi * 1j * ((m * k / height) + (n * l / width)))
                     value += addend
-            value = value * (1 / (height * width)) #sometihing
+            value = value * (1 / (height * width)) 
             #appending the value to the data-array
-            data[y].append(value)
+            data[m].append(value)
     return data
 
 #main programm
@@ -68,18 +68,13 @@ for i in range(0, height):
             data[i].append(0)
 #print(data)
 
-#print(iDFT(DFT(data, width, height), width, height))
-coefficientsArray = []
-for i in range(0, height):
-    coefficientsArray.append([])
-
-for i in range(0, height):
-    for j in range(0, width):
-        if (i == 0 and j == 0) or (i == 4 and j == 0):
-            coefficientsArray[i].append(32 + 0 * cmath.sqrt(-1))
-        else:
-            coefficientsArray[i].append(0 + 0 * cmath.sqrt(-1))
-
-print(coefficientsArray) 
-print(iDFT(coefficientsArray, height, width)) # should be: 1,1,1,1..0,0,0,0,0...1,1,1,1...
-
+#maybe it will be easier to understand if the transformation is going right if we'll remove
+#the imaginary part
+newData = iDFT(DFT(data, width, height), width, height)
+realData = []
+for i in range(0, len(newData)):
+    realData.append([])
+    for j in range(len(newData[i])):
+        realNumber = round(newData[i][j].real)
+        realData[i].append(realNumber)
+print(realData) #seems to be right, let's try rounding

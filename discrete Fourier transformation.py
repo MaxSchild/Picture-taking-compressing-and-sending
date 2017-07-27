@@ -43,9 +43,12 @@ def iDFT(coefficientsArray, width, height):
                     coefficient = coefficientsArray[k][l]
                     addend = coefficient * cmath.exp(2 * cmath.pi * 1j * ((m * k / height) + (n * l / width)))
                     value += addend
-            value = value * (1 / (height * width)) 
-            #appending the value to the data-array
-            data[m].append(value)
+            value = value * (1 / (height * width))
+            #it makes more sense only to return the rounded real part of the numbers,
+            #because the input is an integer
+            realValue = round(value.real)
+            #appending the real part of the value to the data-array
+            data[m].append(realValue)
     return data
 
 #main programm
@@ -66,15 +69,6 @@ for i in range(0, height):
             data[i].append(1)
         else:
             data[i].append(0)
-#print(data)
 
-#maybe it will be easier to understand if the transformation is going right if we'll remove
-#the imaginary part
-newData = iDFT(DFT(data, width, height), width, height)
-realData = []
-for i in range(0, len(newData)):
-    realData.append([])
-    for j in range(len(newData[i])):
-        realNumber = round(newData[i][j].real)
-        realData[i].append(realNumber)
-print(realData) #seems to be right, let's try rounding
+#checking the output
+print(iDFT(DFT(data, width, height), width, height))

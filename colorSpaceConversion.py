@@ -97,6 +97,95 @@ def rgbToYCbCr_4_1_1(redArray, greenArray, blueArray):
             crArray.append(cr)
     return yArray, cbArray, crArray
 
+def yCbCrToRGBFrom4_2_0(yArray, cbArray ,crArray):
+    newRedArray = []
+    newGreenArray = []
+    newBlueArray = []
+    #need to define them here because they don't have to be calculate new for each pixel
+    cb = 0
+    cr = 0
+    for color in range(0, width * height):
+        y = yArray[color]
+        column = color % width
+        row = int((color - column) / width)
+        if column % 2 == 0: 
+            indexCbCr = int(int(row / 2) * (width / 2) + int(column / 2))
+            cb = cbArray[indexCbCr]
+            cr = crArray[indexCbCr]
+        red = yCbCrToR(y, cr)
+        green = yCbCrToG(y, cb, cr)
+        blue = yCbCrToB(y, cb)
+        newRedArray.append(red)
+        newGreenArray.append(green)
+        newBlueArray.append(blue)
+
+    return newRedArray, newGreenArray, newBlueArray
+
+def yCbCrToRGBFrom4_2_2(yArray, cbArray ,crArray):
+    newRedArray = []
+    newGreenArray = []
+    newBlueArray = []
+    #need to define them here because they don't have to be calculate new for each pixel
+    cb = 0
+    cr = 0
+    for color in range(0, width * height):
+        y = yArray[color]
+        column = color % width
+        if column % 2 == 0: 
+            indexCbCr =  int(color / 2)
+            cb = cbArray[indexCbCr]
+            cr = crArray[indexCbCr]
+        red = yCbCrToR(y, cr)
+        green = yCbCrToG(y, cb, cr)
+        blue = yCbCrToB(y, cb)
+        newRedArray.append(red)
+        newGreenArray.append(green)
+        newBlueArray.append(blue)
+
+    return newRedArray, newGreenArray, newBlueArray
+
+
+def yCbCrToRGBFrom4_4_4(yArray, cbArray ,crArray):
+    newRedArray = []
+    newGreenArray = []
+    newBlueArray = []
+    for color in range(0, width * height):
+        y = yArray[color]
+        cb = cbArray[color]
+        cr = crArray[color]
+        red = yCbCrToR(y, cr)
+        green = yCbCrToG(y, cb, cr)
+        blue = yCbCrToB(y, cb)
+        newRedArray.append(red)
+        newGreenArray.append(green)
+        newBlueArray.append(blue)
+
+    return newRedArray, newGreenArray, newBlueArray
+
+def yCbCrToRGBFrom4_1_1(yArray, cbArray ,crArray):
+    newRedArray = []
+    newGreenArray = []
+    newBlueArray = []
+    #need to define them here because they don't have to be calculate new for each pixel
+    cb = 0
+    cr = 0
+    for color in range(0, width * height):
+        y = yArray[color]
+        column = color % width
+        row = int((color - column) / width)
+        if column % 4 == 0: 
+            indexCbCr =  int(color / 4)
+            cb = cbArray[indexCbCr]
+            cr = crArray[indexCbCr]
+        red = yCbCrToR(y, cr)
+        green = yCbCrToG(y, cb, cr)
+        blue = yCbCrToB(y, cb)
+        newRedArray.append(red)
+        newGreenArray.append(green)
+        newBlueArray.append(blue)
+
+    return newRedArray, newGreenArray, newBlueArray
+
 
 #main programm
 
@@ -151,6 +240,13 @@ yArray, cbArray, crArray = rgbToYCbCr_4_2_0(redArray, greenArray, blueArray, wid
 print(len(yArray), len(cbArray))
 print(len(yArray) / len(cbArray))
 
+newRedArray, newGreenArray, newBlueArray = yCbCrToRGBFrom4_2_0(yArray, cbArray ,crArray)
+print("Now differences:")
+for i in range(0, len(newRedArray)):
+    diffR = redArray[i] - newRedArray[i]
+    diffG = greenArray[i] - newGreenArray[i]
+    diffB = blueArray[i] - newBlueArray[i]
+    #print("R:", diffR, "G:", diffG, "B:", diffB) 
 #seems to work !!!
 
 

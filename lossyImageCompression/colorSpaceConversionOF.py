@@ -196,3 +196,33 @@ def yCbCrToRGBFrom4_1_1(yArray, cbArray ,crArray, width, height):
         newBlueArray.append(blue)
 
     return newRedArray, newGreenArray, newBlueArray
+
+#making settings depending on subsampling mode
+def colorSCAndChromaSS(redArray, greenArray, blueArray, width, height, subSMode):
+    #let's create mode numbers for different subsamplings
+    subS4_2_0 = 0
+    subS4_2_2 = 1
+    subS4_2_2 = 2
+    subS4_4_4 = 3
+    subS4_1_1 = 4
+    subSWidthChroma = 1
+    subSHeightChroma = 1
+
+    yArray, cbArray, crArray = [], [], []
+
+    if subSMode == subS4_2_0:
+        yArray, cbArray, crArray = rgbToYCbCr_4_2_0(redArray, greenArray, blueArray, width, height)
+        subSWidthChroma = int(width / 2)
+        subSHeightChroma = int(height / 2)
+    elif subSMode == subS4_2_2:
+        yArray, cbArray, crArray = rgbToYCbCr_4_2_2(redArray, greenArray, blueArray, width, height)
+        subSWidthChroma = int(width / 2)
+    elif subSMode == subS4_4_4:
+        yArray, cbArray, crArray = rgbToYCbCr_4_4_4(redArray, greenArray, blueArray, width, height)
+    elif subSMode == subS4_1_1:
+        yArray, cbArray, crArray = rgbToYCbCr_4_1_1(redArray, greenArray, blueArray, width, height)
+        subSWidthChroma = int(width / 4)
+    else:
+        print("Problem with chroma subsampling!")
+
+        return yArray, cbArray, crArray, subSWidthChroma, subSHeightChroma

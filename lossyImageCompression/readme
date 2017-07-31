@@ -1,1 +1,9 @@
-No Description yet.
+These scripts will be united in one scripts which will contain a function to make a lossy image compression.
+The function will have the following structure:
+  compression:
+    -getting the rgb values from the original picture
+    -color space conversion into rgb and color subsampling
+    -sorting into 8x8 blocks for the later transform
+    -transormation into amplitudes (first with Discrete Fourier Transform, later perhaps with Fast Fourier Transform)
+    -quantization (no matrix yet)
+    -entropy cofidifn 

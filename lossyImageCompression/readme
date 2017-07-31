@@ -25,6 +25,6 @@ It works, but here are the conditions for sucess:
   multiples of 16)
   
   
- Next Steps:
+ Next Steps: (done)
   -outsourcing the time printing (it is actually not needed for the compression but might be useful for later testing)
   -make all color subsamplings work

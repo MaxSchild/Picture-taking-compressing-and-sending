@@ -2,10 +2,17 @@ import colorSpaceConversionOF as CSC
 import discreteFourierTransformOF as DFT
 import extractingPixelDataOF as EPD
 import sortingInto8x8BlocksOF as SIB
-import printMinutesAndSeconds as PMS
+import printMinutesAndSecondsOF as PMS
 
 #testing how long it takes
 import time
+
+#let's create mode numbers for different subsamplings
+subS4_2_0 = 0
+subS4_2_2 = 1
+subS4_2_2 = 2
+subS4_4_4 = 3
+subS4_1_1 = 4
 
 #image compression
 startTime = time.time()
@@ -19,18 +26,39 @@ startTime = PMS.printMinutesAndSeconds(startTime)
 
 
 #color space conversion into ycbcr and chroma subsampling
-yArray, cbArray, crArray = CSC.rgbToYCbCr_4_2_0(redArray, greenArray, blueArray, width, height)
+yArray, cbArray, crArray = [], [], []
+
+#set mode for color subsampling
+subSMode = subS4_2_0
+
+#making settings depending on subsampling mode
+subSWidthChroma = 1
+subSHeightChroma = 1
+
+
+if subSMode == subS4_2_0:
+    yArray, cbArray, crArray = CSC.rgbToYCbCr_4_2_0(redArray, greenArray, blueArray, width, height)
+    subSWidthChroma = int(width / 2)
+    subSHeightChroma = int(height / 2)
+elif subSMode == subS4_2_2:
+    yArray, cbArray, crArray = CSC.rgbToYCbCr_4_2_2(redArray, greenArray, blueArray, width, height)
+    subSWidthChroma = int(width / 2)
+elif subSMode == subS4_4_4:
+    yArray, cbArray, crArray = CSC.rgbToYCbCr_4_4_4(redArray, greenArray, blueArray, width, height)
+elif subSMode == subS4_1_1:
+    yArray, cbArray, crArray = CSC.rgbToYCbCr_4_1_1(redArray, greenArray, blueArray, width, height)
+    subSWidthChroma = int(width / 4)
+else:
+    print("Problem with chroma subsampling!")
+    
 print("Converted into yCbCr!")
 startTime = PMS.printMinutesAndSeconds(startTime)
 
 #sorting into 8x8-Blocks, separate for y, cb and cr
 yArray3D = SIB.blockArray8x8(yArray, width, height)
-subsamplingFactorWidth = 0.5
-subsamplingFactorHeight = 0.5
-#let's assume the subsampling for is 4:2:0 ...
 
-cbArray3D = SIB.blockArray8x8(cbArray, int(subsamplingFactorWidth * width), int(subsamplingFactorHeight * height))
-crArray3D = SIB.blockArray8x8(crArray, int(subsamplingFactorWidth * width), int(subsamplingFactorHeight * height))
+cbArray3D = SIB.blockArray8x8(cbArray, subSWidthChroma, subSHeightChroma)
+crArray3D = SIB.blockArray8x8(crArray, subSWidthChroma, subSHeightChroma)
 print("Sorted into Blocks!")
 startTime = PMS.printMinutesAndSeconds(startTime)
 
@@ -81,8 +109,8 @@ startTime = PMS.printMinutesAndSeconds(startTime)
 
 #inverse 8x8-Sorting
 newYArray = SIB.oneDArray(newYArray3D, width, height)
-newCbArray = SIB.oneDArray(newCbArray3D, int(subsamplingFactorWidth * width), int(subsamplingFactorHeight * height))
-newCrArray = SIB.oneDArray(newCrArray3D, int(subsamplingFactorWidth * width), int(subsamplingFactorHeight * height))
+newCbArray = SIB.oneDArray(newCbArray3D, subSWidthChroma, subSHeightChroma)
+newCrArray = SIB.oneDArray(newCrArray3D, subSWidthChroma, subSHeightChroma)
 print("Sorted into an one-dimensional Array again!")
 startTime = PMS.printMinutesAndSeconds(startTime)
 

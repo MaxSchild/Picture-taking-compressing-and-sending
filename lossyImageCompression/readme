@@ -2,8 +2,29 @@ These scripts will be united in one scripts which will contain a function to mak
 The function will have the following structure:
   compression:
     -getting the rgb values from the original picture
-    -color space conversion into rgb and color subsampling
+    -color space conversion into yCbCr and color subsampling
     -sorting into 8x8 blocks for the later transform
     -transormation into amplitudes (first with Discrete Fourier Transform, later perhaps with Fast Fourier Transform)
-    -quantization (no matrix yet)
-    -entropy cofidifn 
+    -quantization (no matrix yet / not done yet)
+    -entropy coding (not done yet)
+   decompression:
+    -entropy decoding (not done yet)
+    -dequantization (no matrix yet / not done yet)
+    -inverse transformation
+    -making one-dimensional arrays instead of 8x8-Blocks
+    -color space conversion into RGB
+    -saving the picture
+    
+The Python script "lossyImageCompression.py" is the "main function" and does all this.
+It works, but here are the conditions for sucess:
+  -You need the Python Image Library installed (I think it is already pre-installed if you use a Raspbberry pi)
+    -Make sure it works before you test the script, because there might be unexpected problems with the library.
+  -The image you want to compress has to be in the BMP format
+  -A requirement is, that the picture has three layers (RGB)
+  -The width and height of the picture have to be multiples of 8 (if you want to do a 4:2:0 subsampling, they have to be
+  multiples of 16)
+  
+  
+ Next Steps:
+  -outsourcing the time printing (it is actually not needed for the compression but might be useful for later testing)
+  -make all color subsamplings work

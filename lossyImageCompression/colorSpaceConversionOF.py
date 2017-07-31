@@ -224,5 +224,4 @@ def colorSCAndChromaSS(redArray, greenArray, blueArray, width, height, subSMode)
         subSWidthChroma = int(width / 4)
     else:
         print("Problem with chroma subsampling!")
-
-        return yArray, cbArray, crArray, subSWidthChroma, subSHeightChroma
+    return yArray, cbArray, crArray, subSWidthChroma, subSHeightChroma

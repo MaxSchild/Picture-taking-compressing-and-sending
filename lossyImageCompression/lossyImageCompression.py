@@ -7,17 +7,10 @@ import printMinutesAndSecondsOF as PMS
 #testing how long it takes
 import time
 
-#let's create mode numbers for different subsamplings
-subS4_2_0 = 0
-subS4_2_2 = 1
-subS4_2_2 = 2
-subS4_4_4 = 3
-subS4_1_1 = 4
-
 #image compression
 startTime = time.time()
 #necessary: imageName and position
-imageName = "astronaut.bmp"
+imageName = "spaceSmall.bmp"
 
 #getting image (rgb) values
 width, height, redArray, greenArray, blueArray = EPD.takeBMPReturnSizeAndColorArrays(imageName)
@@ -26,31 +19,15 @@ startTime = PMS.printMinutesAndSeconds(startTime)
 
 
 #color space conversion into ycbcr and chroma subsampling
-yArray, cbArray, crArray = [], [], []
+#possible subsampling modes:
+subS4_2_0 = 0
+subS4_2_2 = 1
+subS4_4_4 = 2
+subS4_1_1 = 3
 
-#set mode for color subsampling
-subSMode = subS4_2_0
+subSMode = subS4_2_0 #set mode for color subsampling
+yArray, cbArray, crArray, subSWidthChroma, subSHeightChroma = CSC.colorSCAndChromaSS(redArray, greenArray, blueArray, width, height, subSMode)
 
-#making settings depending on subsampling mode
-subSWidthChroma = 1
-subSHeightChroma = 1
-
-
-if subSMode == subS4_2_0:
-    yArray, cbArray, crArray = CSC.rgbToYCbCr_4_2_0(redArray, greenArray, blueArray, width, height)
-    subSWidthChroma = int(width / 2)
-    subSHeightChroma = int(height / 2)
-elif subSMode == subS4_2_2:
-    yArray, cbArray, crArray = CSC.rgbToYCbCr_4_2_2(redArray, greenArray, blueArray, width, height)
-    subSWidthChroma = int(width / 2)
-elif subSMode == subS4_4_4:
-    yArray, cbArray, crArray = CSC.rgbToYCbCr_4_4_4(redArray, greenArray, blueArray, width, height)
-elif subSMode == subS4_1_1:
-    yArray, cbArray, crArray = CSC.rgbToYCbCr_4_1_1(redArray, greenArray, blueArray, width, height)
-    subSWidthChroma = int(width / 4)
-else:
-    print("Problem with chroma subsampling!")
-    
 print("Converted into yCbCr!")
 startTime = PMS.printMinutesAndSeconds(startTime)
 
@@ -120,7 +97,7 @@ print("Converted back to RGB!")
 startTime = PMS.printMinutesAndSeconds(startTime)
 
 #saving the picture as rgb
-newImageName = "newAstronaut.bmp"
+newImageName = "newSpace.bmp"
 imageFormat = "bmp"
 #look out for the parameters!
 EPD.createNewImage(width, height, newRedArray, newGreenArray, newBlueArray, newImageName, imageFormat)

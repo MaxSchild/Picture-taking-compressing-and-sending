@@ -18,7 +18,7 @@ def DFT(data, width, height):
                 for n in range(0, width):
                     #value shows the intensity, e.g. of a colour of a pixel
                     value = data[m][n]
-                    #formula may be wrong, maybe change x and y in formula?
+                    #formula is right!
                     addend = value * cmath.exp((-2) * 1j  * cmath.pi * ((m * k / height) + (n * l / width)))
                     coefficient += addend
             #appending the coefficient to the coefficientArray

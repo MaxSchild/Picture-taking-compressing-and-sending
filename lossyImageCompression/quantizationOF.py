@@ -55,11 +55,3 @@ def dequantize(matrix, qBlock8x8):
       dequantizedArray[k].append(deQuantizedCoeff)
   return dequantizedArray
 
-#main program
-testArray = []
-for row in range(0,8):
-  testArray.append([])
-  for column in range(0,8):
-    testArray[row].append(16)
-print(testArray)
-print(dequantize(matrix, quantize(matrix, testArray)))

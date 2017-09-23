@@ -3,12 +3,15 @@ import discreteFourierTransformOF as DFT
 import extractingPixelDataOF as EPD
 import sortingInto8x8BlocksOF as SIB
 import printMinutesAndSecondsOF as PMS
+import discreteCosineTransformOF as DCT
+import quantizationOF as QTZ
+
 
 #testing how long it takes
 import time
 
 
-def compressImageAndSaveNewOne(imageName, subSMode, newImageName):
+def compressImageAndSaveNewOne(imageName, subSMode, quantMatrix, newImageName):
     #image compression
     startTime = time.time()
     #necessary: imageName and position
@@ -39,19 +42,29 @@ def compressImageAndSaveNewOne(imageName, subSMode, newImageName):
     coefficientsArrayCb3D = []
     coefficientsArrayCr3D = []
     for i in yArray3D:
-        coefficientsArrayY = DFT.DFT(i, 8, 8)
+        coefficientsArrayY = DCT.dct2D(i) #DFT.DFT(i, 8, 8)
         coefficientsArrayY3D.append(coefficientsArrayY)
     for i in cbArray3D:
-        coefficientsArrayCb = DFT.DFT(i,  8, 8)
+        coefficientsArrayCb = DCT.dct2D(i) #DFT.DFT(i,  8, 8)
         coefficientsArrayCb3D.append(coefficientsArrayCb)
     for i in crArray3D:
-        coefficientsArrayCr = DFT.DFT(i, 8, 8 )
+        coefficientsArrayCr = DCT.dct2D(i) #DFT.DFT(i, 8, 8 )
         coefficientsArrayCr3D.append(coefficientsArrayCr)
     print("Transformed into coefficients!")
     startTime = PMS.printMinutesAndSeconds(startTime)
 
     #quantization
-    #no code yet
+    quantizedArrayY3D = []
+    quantizedArrayCb3D = []
+    quantizedArrayCr3D = []
+    
+    for i in coefficientsArrayY3D:
+        quantizedArrayY3d.append(QTZ.quantize(quantMatrix, i))
+    for i in coefficientsArrayCb3D:
+        quantizedArrayCb3d.append(QTZ.quantize(quantMatrix, i))
+    for i in coefficientsArrayCr3D:
+        quantizedArrayCr3d.append(QTZ.quantize(quantMatrix, i))
+        
 
     #coding
     #no code yet
@@ -64,18 +77,28 @@ def compressImageAndSaveNewOne(imageName, subSMode, newImageName):
     #no code yet
 
     #dequantization
-    #no code yet
-
+    dequantizedArrayY3D = []
+    dequantizedArrayCb3D = []
+    dequantizedArrayCr3D = []
+    
+    for i in coefficientsArrayY3D:
+        dequantizedArrayY3D.append(QTZ.dequantize(quantMatrix), i)
+    for i in coefficientsArrayCb3D:
+        dequantizedArrayCb3D.append(QTZ.dequantize(quantMatrix), i)
+    for i in coefficientsArrayCr3D:
+        dequantizedArrayCr3D.append(QTZ.dequantize(quantMatrix), i)
+        
+        
     #inverse transformation
     newYArray3D = []
     newCbArray3D = []
     newCrArray3D = []
-    for i in coefficientsArrayY3D:
-        newYArray3D.append(DFT.iDFT(i, 8, 8))
-    for i in coefficientsArrayCb3D:
-        newCbArray3D.append(DFT.iDFT(i, 8, 8))
-    for i in coefficientsArrayCr3D:
-        newCrArray3D.append(DFT.iDFT(i,8, 8))
+    for i in dequantizedArrayY3D:
+        newYArray3D.append(iDct2D(i)) #DFT.iDFT(i, 8, 8))
+    for i in dequantizedArrayCb3D:
+        newCbArray3D.append((iDct2D(i)) #DFT.iDFT(i, 8, 8))
+    for i in dequantizedArrayCr3D:
+        newCrArray3D.append((iDct2D(i)) #DFT.iDFT(i,8, 8))
     print("Transformed into Data again!")
     startTime = PMS.printMinutesAndSeconds(startTime)
 

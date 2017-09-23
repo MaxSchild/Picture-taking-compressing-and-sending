@@ -56,6 +56,7 @@ def iDct2D(ergebnisArray):
           
           
           value += summand
-      bildArray[m].append(value)
+	#added int rounding because you need integers for an rgb image	
+      bildArray[m].append(int(value))
   return bildArray
 

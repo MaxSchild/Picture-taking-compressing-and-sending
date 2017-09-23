@@ -1,6 +1,5 @@
 import math
-import random #for testing
-import time
+
 def dct2D(bildArray):
 
   #ergebnisArray wird angelegt
@@ -8,8 +7,7 @@ def dct2D(bildArray):
   #zeilen des Arrays werden mit Spalten befuellt
   for k in range(0,8):
     ergebnisArray.append([])
-  #print(ergebnisArray)
-  #print("Jetzt folgt etwas Gleitpunkt-Arithmetik.Bitte etwas Geduld.")
+
   #durch die zeilen des neuen Arrays gehen
   for k in range(0,8):
   #durch die Spalten des neuen Arrays gehen
@@ -41,7 +39,7 @@ def iDct2D(ergebnisArray):
   bildArray = []
   for m in range(0, 8):
     bildArray.append([])
-  #print("Jetzt folgt etwas Gleitpunkt-Arithmetik. Bitte etwas Geduld.")
+
   for m in range(0,8):
     for n in range(0,8):
       value = 0
@@ -61,34 +59,3 @@ def iDct2D(ergebnisArray):
       bildArray[m].append(value)
   return bildArray
 
-
-
-#main programm
-startTime = time.time()
-tries = 100
-bildArray = []
-for i in range(0,8):
-  bildArray.append([])
-  for j in range(0,8):
-    bildArray[i].append(random.randint(0,255))
-for i in range(0, tries - 1):
-  if i % 100 == 0:
-    print("in the", i, "lap")
-
-  ergebnisArray = dct2D(bildArray)
-  neuesBildArray = iDct2D(ergebnisArray)
-  #for m in range(0, 8):
-  #  for n in range(0, 8):
-  #    difference = bildArray[m][n] - neuesBildArray[m][n]
-  #    if difference > 0.1 or difference < -0.1 :
-  #      print("Too big difference")
-  #      break
-  for m in range(0,8):
-    for n in range(0,8):
-      bildArray[m][n] = random.randint(0,255)
-endTime = time.time()
-timeNeeded = endTime - startTime
-seconds = timeNeeded % 60
-minutes = (timeNeeded - seconds) / 60
-print("finished all", tries, "tries!")
-print("It needed", minutes, "minutes and", seconds, "seconds")

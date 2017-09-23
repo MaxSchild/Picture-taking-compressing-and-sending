@@ -28,8 +28,15 @@ matrixLowQ = [[62, 65, 57, 60, 72, 63, 60, 82],
 
 
 
-print(matrix)
-def quantize(matrix, block8x8):
+def quantize(matrixString, block8x8):
+  if matrixString == "matrixHighQ":
+    matrix = matrixHighQ
+  elif matrixString == "matrixMidQ":
+    matrix = matrixMidQ
+  elif matrixString == "matrixLowQ":
+    matrix = matrixLowQ
+  else:
+    print("Failure! Error!")
   quantizedArray = []
   for row in range(0,8):
     quantizedArray.append([])
@@ -43,7 +50,15 @@ def quantize(matrix, block8x8):
       quantizedArray[k].append(quantizedCoeff)
   return quantizedArray
 
-def dequantize(matrix, qBlock8x8):
+def dequantize(matrixString, qBlock8x8):
+  if matrixString == "matrixHighQ":
+    matrix = matrixHighQ
+  elif matrixString == "matrixMidQ":
+    matrix = matrixMidQ
+  elif matrixString == "matrixLowQ":
+    matrix = matrixLowQ
+  else:
+    print("Failure! Error!")
   dequantizedArray = []
   for row in range(0,8):
     dequantizedArray.append([])

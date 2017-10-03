@@ -4,12 +4,12 @@ The function will have the following structure:
     -getting the rgb values from the original picture
     -color space conversion into yCbCr and color subsampling
     -sorting into 8x8 blocks for the later transform
-    -transormation into amplitudes (first with Discrete Fourier Transform, later perhaps with Fast Fourier Transform)
-    -quantization (no matrix yet / not done yet)
+    -transormation into amplitudes (possible with Discrete Fourier Transform, in the main programm did with Discrete Cosine Transform)
+    -quantization (not fully working yet, only with a matrix containing just ones)
     -entropy coding (not done yet)
    decompression:
     -entropy decoding (not done yet)
-    -dequantization (no matrix yet / not done yet)
+    -dequantization (as mentioned, not fully working yet)
     -inverse transformation
     -making one-dimensional arrays instead of 8x8-Blocks
     -color space conversion into RGB
@@ -25,6 +25,6 @@ It works, but here are the conditions for sucess:
   multiples of 16)
   
   
- Next Steps: (done)
-  -outsourcing the time printing (it is actually not needed for the compression but might be useful for later testing)
+ Next Steps: 
+  -outsourcing the time printing (it is actually not needed for the compression but might be useful for later testing) (done)
   -make all color subsamplings work

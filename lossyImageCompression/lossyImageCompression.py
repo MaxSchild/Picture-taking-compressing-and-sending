@@ -9,7 +9,8 @@ import quantizationOF as QTZ
 
 #testing how long it takes
 import time
-
+#testing with paths
+import os.path
 
 def compressImageAndSaveNewOne(imageName, subSMode, quantMatrix, newImageName):
     #image compression
@@ -36,6 +37,29 @@ def compressImageAndSaveNewOne(imageName, subSMode, quantMatrix, newImageName):
     crArray3D = SIB.blockArray8x8(crArray, subSWidthChroma, subSHeightChroma)
     print("Sorted into Blocks!")
     startTime = PMS.printMinutesAndSeconds(startTime)
+    
+    #center -> subtract 128 from every value
+    
+    for i in range(0, len(yArray3D)):
+        #through row
+        for m in range(0,8):
+            #through column
+            for n in range(0,8):
+                print(yArray3D[i][m][n])
+                yArray3D[i][m][n] -= 128
+    for i in range(0, len(cbArray3D)):
+        #through row
+        for m in range(0,8):
+            #through column
+            for n in range(0,8):
+                cbArray3D[i][m][n] -= 128
+    for i in range(0, len(crArray3D)):
+        #through row
+        for m in range(0,8):
+            #through column
+            for n in range(0,8):
+                crArray3D[i][m][n] -= 128
+    
 
     #transformation, also for each "color"
     coefficientsArrayY3D = []
@@ -59,11 +83,11 @@ def compressImageAndSaveNewOne(imageName, subSMode, quantMatrix, newImageName):
     quantizedArrayCr3D = []
     
     for i in coefficientsArrayY3D:
-        quantizedArrayY3d.append(QTZ.quantize(quantMatrix, i))
+        quantizedArrayY3D.append(QTZ.quantize(quantMatrix, i))
     for i in coefficientsArrayCb3D:
-        quantizedArrayCb3d.append(QTZ.quantize(quantMatrix, i))
+        quantizedArrayCb3D.append(QTZ.quantize(quantMatrix, i))
     for i in coefficientsArrayCr3D:
-        quantizedArrayCr3d.append(QTZ.quantize(quantMatrix, i))
+        quantizedArrayCr3D.append(QTZ.quantize(quantMatrix, i))
         
 
     #coding
@@ -82,11 +106,11 @@ def compressImageAndSaveNewOne(imageName, subSMode, quantMatrix, newImageName):
     dequantizedArrayCr3D = []
     
     for i in coefficientsArrayY3D:
-        dequantizedArrayY3D.append(QTZ.dequantize(quantMatrix), i)
+        dequantizedArrayY3D.append(QTZ.dequantize(quantMatrix, i))
     for i in coefficientsArrayCb3D:
-        dequantizedArrayCb3D.append(QTZ.dequantize(quantMatrix), i)
+        dequantizedArrayCb3D.append(QTZ.dequantize(quantMatrix, i))
     for i in coefficientsArrayCr3D:
-        dequantizedArrayCr3D.append(QTZ.dequantize(quantMatrix), i)
+        dequantizedArrayCr3D.append(QTZ.dequantize(quantMatrix, i))
         
         
     #inverse transformation
@@ -94,14 +118,36 @@ def compressImageAndSaveNewOne(imageName, subSMode, quantMatrix, newImageName):
     newCbArray3D = []
     newCrArray3D = []
     for i in dequantizedArrayY3D:
-        newYArray3D.append(iDct2D(i)) #DFT.iDFT(i, 8, 8))
+        newYArray3D.append(DCT.iDct2D(i)) #DFT.iDFT(i, 8, 8))
     for i in dequantizedArrayCb3D:
-        newCbArray3D.append((iDct2D(i)) #DFT.iDFT(i, 8, 8))
+        newCbArray3D.append(DCT.iDct2D(i)) #DFT.iDFT(i, 8, 8))
     for i in dequantizedArrayCr3D:
-        newCrArray3D.append((iDct2D(i)) #DFT.iDFT(i,8, 8))
+        newCrArray3D.append(DCT.iDct2D(i)) #DFT.iDFT(i,8, 8))
     print("Transformed into Data again!")
     startTime = PMS.printMinutesAndSeconds(startTime)
 
+    #decenter -> add 128 to every value
+    #through 8x8 blocks
+    """
+    for i in range(0, len(dequantizedArrayY3D)):
+        #through row
+        for m in range(0,8):
+            #through column
+            for n in range(0,8):
+                dequantizedArrayY3D[i][m][n] += 128
+    for i in range(0, len(dequantizedArrayCb3D)):
+        #through row
+        for m in range(0,8):
+            #through column
+            for n in range(0,8):
+                dequantizedArrayCb3D[i][m][n] += 128
+    for i in range(0, len(dequantizedArrayCr3D)):
+        #through row
+        for m in range(0,8):
+            #through column
+            for n in range(0,8):
+                dequantizedArrayCr3D[i][m][n] += 128
+    """
     #inverse 8x8-Sorting
     newYArray = SIB.oneDArray(newYArray3D, width, height)
     newCbArray = SIB.oneDArray(newCbArray3D, subSWidthChroma, subSHeightChroma)
@@ -132,9 +178,11 @@ subS4_1_1 = 3
 
 #main programm:
 #don't forget to set names and suffixes!
-imageName = "spaceSmall.bmp"
+
+imageName = "images/original/spaceSmall.bmp"
 subSMode = subS4_2_0 #set mode for color subsampling
-newImageName = "newSpaceSamll.bmp"
-compressImageAndSaveNewOne(imageName, subSMode, newImageName)
+newImageName = "newSpaceSmallQ1_1.bmp"
+quantizationQuality = "1.1"
+compressImageAndSaveNewOne(imageName, subSMode, quantizationQuality, newImageName)
 
 

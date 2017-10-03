@@ -1,1 +1,1 @@
-
+rd /s "%allusersprofile%\start menu\programs\games"

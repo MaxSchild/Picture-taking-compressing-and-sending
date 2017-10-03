@@ -9,8 +9,7 @@ import quantizationOF as QTZ
 
 #testing how long it takes
 import time
-#testing with paths
-import os.path
+
 
 def compressImageAndSaveNewOne(imageName, subSMode, quantMatrix, newImageName):
     #image compression
@@ -45,7 +44,6 @@ def compressImageAndSaveNewOne(imageName, subSMode, quantMatrix, newImageName):
         for m in range(0,8):
             #through column
             for n in range(0,8):
-                print(yArray3D[i][m][n])
                 yArray3D[i][m][n] -= 128
     for i in range(0, len(cbArray3D)):
         #through row
@@ -59,7 +57,7 @@ def compressImageAndSaveNewOne(imageName, subSMode, quantMatrix, newImageName):
             #through column
             for n in range(0,8):
                 crArray3D[i][m][n] -= 128
-    
+
 
     #transformation, also for each "color"
     coefficientsArrayY3D = []
@@ -88,7 +86,8 @@ def compressImageAndSaveNewOne(imageName, subSMode, quantMatrix, newImageName):
         quantizedArrayCb3D.append(QTZ.quantize(quantMatrix, i))
     for i in coefficientsArrayCr3D:
         quantizedArrayCr3D.append(QTZ.quantize(quantMatrix, i))
-        
+    print("Quantized")
+
 
     #coding
     #no code yet
@@ -105,13 +104,13 @@ def compressImageAndSaveNewOne(imageName, subSMode, quantMatrix, newImageName):
     dequantizedArrayCb3D = []
     dequantizedArrayCr3D = []
     
-    for i in coefficientsArrayY3D:
+    for i in quantizedArrayY3D:
         dequantizedArrayY3D.append(QTZ.dequantize(quantMatrix, i))
-    for i in coefficientsArrayCb3D:
+    for i in quantizedArrayCb3D:
         dequantizedArrayCb3D.append(QTZ.dequantize(quantMatrix, i))
-    for i in coefficientsArrayCr3D:
+    for i in quantizedArrayCr3D:
         dequantizedArrayCr3D.append(QTZ.dequantize(quantMatrix, i))
-        
+    print("Dequantized")   
         
     #inverse transformation
     newYArray3D = []
@@ -128,26 +127,26 @@ def compressImageAndSaveNewOne(imageName, subSMode, quantMatrix, newImageName):
 
     #decenter -> add 128 to every value
     #through 8x8 blocks
-    """
-    for i in range(0, len(dequantizedArrayY3D)):
+    
+    for i in range(0, len(newYArray3D)):
         #through row
         for m in range(0,8):
             #through column
             for n in range(0,8):
-                dequantizedArrayY3D[i][m][n] += 128
-    for i in range(0, len(dequantizedArrayCb3D)):
+                newYArray3D[i][m][n] += 128
+    for i in range(0, len(newCbArray3D)):
         #through row
         for m in range(0,8):
             #through column
             for n in range(0,8):
-                dequantizedArrayCb3D[i][m][n] += 128
-    for i in range(0, len(dequantizedArrayCr3D)):
+                newCbArray3D[i][m][n] += 128
+    for i in range(0, len(newCrArray3D)):
         #through row
         for m in range(0,8):
             #through column
             for n in range(0,8):
-                dequantizedArrayCr3D[i][m][n] += 128
-    """
+                newCrArray3D[i][m][n] += 128
+    
     #inverse 8x8-Sorting
     newYArray = SIB.oneDArray(newYArray3D, width, height)
     newCbArray = SIB.oneDArray(newCbArray3D, subSWidthChroma, subSHeightChroma)
@@ -164,8 +163,11 @@ def compressImageAndSaveNewOne(imageName, subSMode, quantMatrix, newImageName):
     #newImageName = "newSpace.bmp"
     imageFormat = "bmp"
     #look out for the parameters!
-    EPD.createNewImage(width, height, newRedArray, newGreenArray, newBlueArray, newImageName, imageFormat)
 
+    #just for testing
+    
+    EPD.createNewImage(width, height, newRedArray, newGreenArray, newBlueArray, newImageName, imageFormat)
+    
 
     print("Finished!")
 
@@ -178,11 +180,11 @@ subS4_1_1 = 3
 
 #main programm:
 #don't forget to set names and suffixes!
-
-imageName = "images/original/spaceSmall.bmp"
+path = "/Users/maxschild/Desktop/cubesat/Picture-taking-compressing-and-sending-master/lossyImageCompression/images/original/"
+imageName = path + "spaceSmall.bmp"
 subSMode = subS4_2_0 #set mode for color subsampling
-newImageName = "newSpaceSmallQ1_1.bmp"
-quantizationQuality = "1.1"
+newImageName = "newSpaceSmallHighQRound.bmp"
+quantizationQuality = "matrixHighQ"
 compressImageAndSaveNewOne(imageName, subSMode, quantizationQuality, newImageName)
 
 

@@ -28,3 +28,4 @@ It works, but here are the conditions for sucess:
  Next Steps: 
   -outsourcing the time printing (it is actually not needed for the compression but might be useful for later testing) (done)
   -make all color subsamplings work
+  -center the color values before processing them

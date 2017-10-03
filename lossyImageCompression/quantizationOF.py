@@ -29,6 +29,7 @@ matrixLowQ = [[62, 65, 57, 60, 72, 63, 60, 82],
 
 
 def quantize(matrixString, block8x8):
+  matrix = []
   if matrixString == "matrixHighQ":
     matrix = matrixHighQ
   elif matrixString == "matrixMidQ":
@@ -36,7 +37,14 @@ def quantize(matrixString, block8x8):
   elif matrixString == "matrixLowQ":
     matrix = matrixLowQ
   else:
-    print("Failure! Error!")
+    #print("Custom!")
+    factor = int(matrixString)
+
+    for k in range(0,8):
+      matrix.append([])
+      for l in range(0,8):
+        matrix[k].append(factor)
+    #print("Made the quantizationblock")
   quantizedArray = []
   for row in range(0,8):
     quantizedArray.append([])
@@ -46,11 +54,13 @@ def quantize(matrixString, block8x8):
     #for columns
     for l in range(0,8):
       #quantize values and apend to quantizedArray
-      quantizedCoeff = int(block8x8[k][l] / matrix[k][l])
+      #test if there is a difference between int() and round() for the result
+      quantizedCoeff = round(block8x8[k][l] / matrix[k][l])
       quantizedArray[k].append(quantizedCoeff)
   return quantizedArray
 
 def dequantize(matrixString, qBlock8x8):
+  matrix = []
   if matrixString == "matrixHighQ":
     matrix = matrixHighQ
   elif matrixString == "matrixMidQ":
@@ -58,7 +68,14 @@ def dequantize(matrixString, qBlock8x8):
   elif matrixString == "matrixLowQ":
     matrix = matrixLowQ
   else:
-    print("Failure! Error!")
+    #print("Custom!")
+    factor = int(matrixString)
+
+    for k in range(0,8):
+      matrix.append([])
+      for l in range(0,8):
+        matrix[k].append(factor)
+    #print("Made the quantizationblock")
   dequantizedArray = []
   for row in range(0,8):
     dequantizedArray.append([])
